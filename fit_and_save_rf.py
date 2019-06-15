@@ -1,3 +1,10 @@
+"""
+Create a model based on a list of features
+
+You can call it like so:
+
+    python -m newcomb.fit_and_save_rf newcomb-server/newcomb-data.csv gender age payoff1 payoff2
+"""
 import argparse
 import json
 import pdb
