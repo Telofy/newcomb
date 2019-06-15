@@ -12,8 +12,8 @@ from sklearn.metrics import recall_score
 from . import utils
 
 
-def fit_and_save_test_rf(model_fname, feature_names):
-    data = pd.read_csv("newcomb-data.csv")
+
+def fit_test_rf(data, feature_names):
     random.seed(1)
     dataframes_for_each_study = utils.split_dataset_by_study(
         data, feature_names, excluded_study_labels=(20,)
@@ -22,8 +22,7 @@ def fit_and_save_test_rf(model_fname, feature_names):
     # Merge dataframes
     X = pd.DataFrame({f: [] for f in feature_names})
     y = np.zeros(0)
-    for X_and_y in dataframes_for_each_study.values():
-        X_, y_ = X_and_y
+    for X_, y_ in dataframes_for_each_study.values():
         X = pd.concat([X, X_])
         y = np.append(y, y_)
 
@@ -31,8 +30,7 @@ def fit_and_save_test_rf(model_fname, feature_names):
     clf = RandomForestClassifier(n_estimators=100)
     clf.fit(X, y)
 
-    # Save model
-    pkl.dump(clf, open(model_fname, "wb"))
+    return clf
 
 
 if __name__ == "__main__":
