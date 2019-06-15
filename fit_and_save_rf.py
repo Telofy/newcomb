@@ -45,9 +45,9 @@ def fit_test_rf(data, feature_names):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Train a model.')
-    parser.add_argument('datafile', help='the CSV file')
-    parser.add_argument('features', nargs='+', help='the feature names, without payoffRatio')
+    parser = argparse.ArgumentParser(description="Train a model.")
+    parser.add_argument("datafile", help="the CSV file")
+    parser.add_argument("features", nargs="+", help="the feature names, without payoffRatio")
     args = parser.parse_args()
 
     data = pd.read_csv(args.datafile)
@@ -59,7 +59,7 @@ if __name__ == "__main__":
     with open(PICKLE_FILE, "wb") as pickle_file:
         pickle.dump(model, pickle_file)
 
-    print('Please input a JSON list of features:')
+    print("Please input a JSON list of features:")
     for line in sys.stdin:
         values = json.loads(line)
         print(model.predict([values]))

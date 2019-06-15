@@ -80,9 +80,7 @@ def split_dataset_by_study(data, feature_names, excluded_study_labels=(20,)):
             print("Study {} data size {}".format(study_number, data_for_study.shape))
 
             if data_for_study.shape[0] > 0:
-                X_for_study = data_for_study.drop(
-                    labels=["newcomb_combined", "Study"], axis=1
-                )
+                X_for_study = data_for_study.drop(labels=["newcomb_combined", "Study"], axis=1)
                 X_for_study["payoff1"] = PAYOFF_DICT[study_number][0]
                 X_for_study["payoff2"] = PAYOFF_DICT[study_number][1]
                 X_for_study["payoffRatio"] = X_for_study.payoff1 / X_for_study.payoff2

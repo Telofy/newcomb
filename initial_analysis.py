@@ -73,9 +73,7 @@ def studywise_logistic_regression(feature_names):
                 # Construct string to display coef for each feature
                 coef_str = ""
                 for ix, feature_name in enumerate(feature_names):
-                    coef_str += " {}: {}".format(
-                        feature_name, np.round(logit.coef_[0, ix], 2)
-                    )
+                    coef_str += " {}: {}".format(feature_name, np.round(logit.coef_[0, ix], 2))
 
                 results["study_no"].append(study_number)
                 results["payoff1"].append(np.round(payoff1, 2))
@@ -165,18 +163,13 @@ def leave_one_study_out_analysis(
             selector.fit(X_train, y_train)
 
             # Train and test accuracy
-            selected_features = [
-                n for i, n in enumerate(feature_names) if selector.support_[i]
-            ]
-            train_predictions = selector.estimator_.predict_proba(
-                X_train[selected_features]
-            )[:, -1]
+            selected_features = [n for i, n in enumerate(feature_names) if selector.support_[i]]
+            train_predictions = selector.estimator_.predict_proba(X_train[selected_features])[:, -1]
             train_acc, threshold = utils.balanced_accuracy_for_optimal_threshold(
                 y_train, train_predictions
             )
             test_predictions = (
-                selector.estimator_.predict_proba(X_test[selected_features])[:, -1]
-                > threshold
+                selector.estimator_.predict_proba(X_test[selected_features])[:, -1] > threshold
             ) + 1
             test_acc = utils.balanced_accuracy_score(y_test, test_predictions)
 

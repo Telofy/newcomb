@@ -15,12 +15,10 @@ RESULTS_FNAME = None
 SAVE = False
 
 
-def importance_sampling_analysis(
-    random_seed=RANDOM_SEED, results_fname=RESULTS_FNAME, save=SAVE
-):
+def importance_sampling_analysis(random_seed=RANDOM_SEED, results_fname=RESULTS_FNAME, save=SAVE):
     """
-    For each study, fit a predictive model on each of the remaining studies, estimate the joint distribution of the
-    features, and combine predictions using importance weighting.
+    For each study, fit a predictive model on each of the remaining studies, estimate the joint
+    distribution of the features, and combine predictions using importance weighting.
 
     :param random_seed:
     :param results_fname:
@@ -31,7 +29,8 @@ def importance_sampling_analysis(
     random.seed(random_seed)
     dataframes_for_each_study = utils.split_dataset_by_study(data)
 
-    # For each study, collect data from other studies with same features, train predictive model, and evaluate
+    # For each study, collect data from other studies with same features, train predictive model,
+    # and evaluate
     results = {"study_no": [], "test_acc": []}
     for test_study_number, X_and_y_test in dataframes_for_each_study.items():
         X_test, y_test = X_and_y_test
@@ -54,13 +53,11 @@ def importance_sampling_analysis(
 
                 # Compute prediction on test data and collect
                 selected_features = [
-                    n
-                    for i, n in enumerate(overlapping_features)
-                    if selector.support_[i]
+                    n for i, n in enumerate(overlapping_features) if selector.support_[i]
                 ]
-                test_predictions = selector.estimator_.predict_proba(
-                    X_test[selected_features]
-                )[:, -1]
+                test_predictions = selector.estimator_.predict_proba(X_test[selected_features])[
+                    :, -1
+                ]
                 votes = np.vstack((votes, test_predictions))
 
         # Get final predictions and compute accuracy
