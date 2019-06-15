@@ -1,6 +1,9 @@
+import argparse
+import json
 import pdb
-import pickle as pkl
+import pickle
 import random
+import sys
 
 import numpy as np
 import pandas as pd
@@ -11,6 +14,7 @@ from sklearn.metrics import recall_score
 
 from . import utils
 
+PICKLE_FILE = "newcomb-model.pickle"
 
 
 def fit_test_rf(data, feature_names):
@@ -34,16 +38,21 @@ def fit_test_rf(data, feature_names):
 
 
 if __name__ == "__main__":
-    feature_names = ["gender", "age", "payoff1", "payoff2"]
-    model_fname = "test_model.sav"
+    parser = argparse.ArgumentParser(description='Train a model.')
+    parser.add_argument('datafile', help='the CSV file')
+    parser.add_argument('features', nargs='+', help='the feature names, without payoffRatio')
+    args = parser.parse_args()
+
+    data = pd.read_csv(args.datafile)
 
     # Fit and save model
-    fit_and_save_test_rf(model_fname, feature_names)
+    model = fit_test_rf(data, args.features)
 
-    # Load model and data to get test datapoint
-    test_model = pkl.load(open("test_model.sav", "rb"))
-    data = pd.read_csv("newcomb-data.csv")
-    x_test = [[1, 30, 20, 3, 0.5]]
+    # Save model
+    with open(PICKLE_FILE, "wb") as pickle_file:
+        pickle.dump(model, pickle_file)
 
-    # Run model on test point
-    print(test_model.predict(x_test))
+    print('Please input a JSON list of features:')
+    for line in sys.stdin:
+        values = json.loads(line)
+        print(model.predict([values]))

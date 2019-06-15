@@ -70,7 +70,8 @@ def split_dataset_by_study(data, feature_names, excluded_study_labels=(20,)):
         if not np.isnan(study_number) and study_number not in excluded_study_labels:
             data_for_study = data[data["Study"] == study_number]
 
-            # Drop empty columns, then take complete cases (null values are coded as ' ', need to change to nan)
+            # Drop empty columns, then take complete cases (null values are coded as ' ',
+            # need to change to nan)
             data_for_study.replace(" ", np.nan, regex=True, inplace=True)
             data_for_study.dropna(axis=1, how="all", inplace=True)
             data_for_study.dropna(axis=0, how="any", inplace=True)
