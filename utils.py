@@ -63,18 +63,19 @@ def split_dataset_by_study(data, feature_names, excluded_study_labels=(20,)):
         # Convert ethnicity coding from numeric to categorical
         data["ethnicity"] = data.ethnicity.astype("category")
 
+    # Drop empty columns, then take complete cases (null values are coded as ' ',
+    # need to change to nan)
+    data.replace(" ", np.nan, inplace=True)
+    data.dropna(axis=1, how="all", inplace=True)
+    data.dropna(axis=0, how="any", inplace=True)
+    data = data.applymap(float)
+
     # Create separate dataframes for each study
     dataframes_for_each_study = {}
     for study_number in data.Study.unique():
         if not np.isnan(study_number) and study_number not in excluded_study_labels:
             data_for_study = data[data["Study"] == study_number]
 
-            # Drop empty columns, then take complete cases (null values are coded as ' ',
-            # need to change to nan)
-            data_for_study.replace(" ", np.nan, regex=True, inplace=True)
-            data_for_study.dropna(axis=1, how="all", inplace=True)
-            data_for_study.dropna(axis=0, how="any", inplace=True)
-            data_for_study = data_for_study.applymap(float)
             data_for_study = data_for_study[data_for_study["newcomb_combined"] != 0.0]
             print("Study {} data size {}".format(study_number, data_for_study.shape))
 
