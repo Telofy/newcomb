@@ -57,12 +57,11 @@ def split_dataset_by_study(data, feature_names, excluded_study_labels=(20,)):
         for col in data.columns:
             if col not in ["Study", "newcomb_combined"] and col not in feature_names:
                 cols_to_remove.append(col)
-
     data.drop(labels=cols_to_remove, axis=1, inplace=True, errors="ignore")
+
     if "ethnicity" in data.columns:
-        data["ethnicity"] = data.ethnicity.astype(
-            "category"
-        )  # Convert ethnicity coding from numeric to categorical
+        # Convert ethnicity coding from numeric to categorical
+        data["ethnicity"] = data.ethnicity.astype("category")
 
     # Create separate dataframes for each study
     dataframes_for_each_study = {}
