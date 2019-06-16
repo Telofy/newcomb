@@ -58,7 +58,7 @@ def split_dataset_by_study(data, feature_names, excluded_study_labels=(20,)):
             if col not in ["Study", "newcomb_combined"] and col not in feature_names:
                 cols_to_remove.append(col)
 
-    data.drop(labels=cols_to_remove, axis=1, inplace=True)
+    data.drop(labels=cols_to_remove, axis=1, inplace=True, errors="ignore")
     if "ethnicity" in data.columns:
         data["ethnicity"] = data.ethnicity.astype(
             "category"
